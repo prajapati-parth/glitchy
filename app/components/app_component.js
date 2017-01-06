@@ -24,7 +24,8 @@ export default class AppComponent extends React.Component {
 
 	handleBackspaceEvent(currentKey) {
 		var boxArr_current = this.state.boxArr,
-			eleValue = document.getElementById(currentKey).value
+			selector = "gb"+currentKey,
+			eleValue = document.getElementById(selector).value
 
 		if(!eleValue) {
 			this.state.boxArr.filter(function(element, index) {
@@ -32,9 +33,21 @@ export default class AppComponent extends React.Component {
 					boxArr_current.splice(index, 1)
 				}
 			})
+
 			this.setState({
 				boxArr: boxArr_current
 			})
+
+			if(currentKey-1>0) {
+				let selector_previous = "gb"+(currentKey-1)
+				setTimeout(function() {
+					document.getElementById(selector_previous).focus()
+				}, 50)
+			} else if (document.getElementsByClassName('gbMainContainer').length) {
+				setTimeout(function() {
+					document.getElementsByClassName('gbMainContainer')[0].focus()
+				}, 50)
+			}
 		}
 	}
 
@@ -44,9 +57,10 @@ export default class AppComponent extends React.Component {
             	<div className="col-sm-6 stepsContainer">
                 	<p className="stepsContainerTitle">Steps:</p>
                 	{
-                		this.state.boxArr.map((item) => (
+                		this.state.boxArr.map((item, index) => (
                 			<GlitchyBox
                 				itemId={item.id}
+								itemIndex={index}
                 				key={item.id}
 		                		tabPressed={this.handleTabPressEvent.bind(this)}
 		                		backspacePressed={this.handleBackspaceEvent.bind(this)}

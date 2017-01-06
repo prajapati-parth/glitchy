@@ -17,8 +17,9 @@ export default class GlitchyBox extends React.Component {
 
 	render() {
 		return (
-			<div className="form-group">
-				<input id={this.props.itemId} type="text" className="form-control" onKeyDown={this.keyPress.bind(this)} />
+			<div className="input-group gbMainContainer">
+				<span className="input-group-addon">{"#"+this.props.itemIndex}</span>
+				<input id={'gb'+this.props.itemId} type="text" className="form-control" onKeyDown={this.keyPress.bind(this)} />
 			</div>
 		)
 	}
