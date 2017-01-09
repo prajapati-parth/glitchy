@@ -6,18 +6,31 @@ export default class AppComponent extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			indexId: 1,
-			boxArr: [{id: 1}]
+			boxArr: [{id: 0}]
 		}
 	}
 
+	//utility
+	focusNextItem(key, boxArr_current) {
+		var selector_next = "gb"+(key+1),
+			element_focus = document.getElementById(selector_next)
+
+		setTimeout(function() {
+			//if previous element exists, focus it else focus the first element
+			if (element_focus) {
+				element_focus.focus()
+			} else {
+				let container_focus = document.getElementsByClassName('gbMainContainer')[0]
+				container_focus.getElementsByTagName('input')[boxArr_current.length-1].focus()
+			}
+		}, 50)
+	}
+
 	//events
-	handleTabPressEvent(currentKey) {
-		if(currentKey == this.state.indexId) { //only add new element if tab pressed on last child
-			var boxArr_next = [{id: this.state.indexId+1}]
+	handleTabPressEvent(itemIndex) {
+		if(itemIndex == this.state.boxArr.length-1) {
 			this.setState({
-				indexId: this.state.indexId+1,
-				boxArr: this.state.boxArr.concat(boxArr_next)
+				boxArr: this.state.boxArr.concat([{id: this.state.boxArr.length}])
 			})
 		}
 	}
@@ -27,27 +40,15 @@ export default class AppComponent extends React.Component {
 			selector = "gb"+currentKey,
 			eleValue = document.getElementById(selector).value
 
-		if(!eleValue) {
-			this.state.boxArr.filter(function(element, index) {
-				if(element.id === currentKey) {
-					boxArr_current.splice(index, 1)
-				}
-			})
-
+		//remove the current glitchybox only if it has no text in it or more than one of them exists
+		if(!eleValue && boxArr_current.length > 1) {
+			delete boxArr_current[currentKey] //using delete because splice didnt seem to work
+				
 			this.setState({
 				boxArr: boxArr_current
 			})
 
-			if(currentKey-1>0) {
-				let selector_previous = "gb"+(currentKey-1)
-				setTimeout(function() {
-					document.getElementById(selector_previous).focus()
-				}, 50)
-			} else if (document.getElementsByClassName('gbMainContainer').length) {
-				setTimeout(function() {
-					document.getElementsByClassName('gbMainContainer')[0].focus()
-				}, 50)
-			}
+			this.focusNextItem(currentKey, boxArr_current)
 		}
 	}
 
@@ -59,9 +60,8 @@ export default class AppComponent extends React.Component {
                 	{
                 		this.state.boxArr.map((item, index) => (
                 			<GlitchyBox
-                				itemId={item.id}
 								itemIndex={index}
-                				key={item.id}
+                				key={index}
 		                		tabPressed={this.handleTabPressEvent.bind(this)}
 		                		backspacePressed={this.handleBackspaceEvent.bind(this)}
 		                	/>

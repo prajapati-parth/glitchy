@@ -6,12 +6,12 @@ export default class GlitchyBox extends React.Component {
 		switch(event.keyCode) {
 			case 9:
 				if(!event.shiftKey) { //skips if shift+Tab is pressed
-					this.props.tabPressed(this.props.itemId)
+					this.props.tabPressed(this.props.itemIndex)
 				}
 				break;
 
 			case 8:
-				this.props.backspacePressed(this.props.itemId)
+				this.props.backspacePressed(this.props.itemIndex)
 		}
 	}
 
@@ -19,7 +19,7 @@ export default class GlitchyBox extends React.Component {
 		return (
 			<div className="input-group gbMainContainer">
 				<span className="input-group-addon">{"#"+this.props.itemIndex}</span>
-				<input id={'gb'+this.props.itemId} type="text" className="form-control" onKeyDown={this.keyPress.bind(this)} />
+				<input id={'gb'+this.props.itemIndex} type="text" className="form-control" onKeyDown={this.keyPress.bind(this)} />
 			</div>
 		)
 	}
