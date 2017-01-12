@@ -12,16 +12,18 @@ export default class AppComponent extends React.Component {
 
 	//utility
 	focusNextItem(key, boxArr_current) {
-		var selector_next = "gb"+(key+1),
+		setTimeout(function() {
+			var selector_next = "gb"+(key),
 			element_focus = document.getElementById(selector_next)
 
-		setTimeout(function() {
 			//if previous element exists, focus it else focus the first element
 			if (element_focus) {
 				element_focus.focus()
 			} else {
-				let container_focus = document.getElementsByClassName('gbMainContainer')[0]
-				container_focus.getElementsByTagName('input')[boxArr_current.length-1].focus()
+				// let container_focus = document.getElementsByClassName('gbMainContainer')
+				// container_focus.getElementsByTagName('input')[boxArr_current.length-1].focus()
+				let focusId = "#gb" + (boxArr_current.length-1).toString()
+				document.querySelectorAll('.gbMainContainer '+focusId)[0].focus()
 			}
 		}, 50)
 	}
@@ -42,8 +44,8 @@ export default class AppComponent extends React.Component {
 
 		//remove the current glitchybox only if it has no text in it or more than one of them exists
 		if(!eleValue && boxArr_current.length > 1) {
-			delete boxArr_current[currentKey] //using delete because splice didnt seem to work
-				
+			boxArr_current.splice(currentKey, 1)
+			
 			this.setState({
 				boxArr: boxArr_current
 			})
