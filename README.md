@@ -9,5 +9,5 @@ The JIRA tool
 Note: to run bundling as watcher
 ####run 
 	./node_modules/.bin/webpack -d --watch
-or
+####or
 	npm run dev
