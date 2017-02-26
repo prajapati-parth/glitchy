@@ -10,7 +10,17 @@ export default class AppComponent extends React.Component {
 		}
 	}
 
-	//utility
+	//UTILITY
+	removeByAttr(arr, attr, value) {
+		var i = arr.length;
+		while(i--){
+			if( arr[i] && arr[i].hasOwnProperty(attr) && (arguments.length > 2 && arr[i][attr] === value ) ){
+				arr.splice(i,1);
+			}
+		}
+		return arr;
+	}
+
 	focusNextItem(key, boxArr_current) {
 		setTimeout(function() {
 			var selector_next = "gb"+(key),
@@ -27,9 +37,11 @@ export default class AppComponent extends React.Component {
 			}
 		}, 50)
 	}
+	//utility
 
 	//events
 	handleTabPressEvent(itemIndex) {
+		//insert new item only if the current position is the last postion
 		if(itemIndex == this.state.boxArr.length-1) {
 			this.setState({
 				boxArr: this.state.boxArr.concat([{id: this.state.boxArr.length}])
@@ -37,20 +49,12 @@ export default class AppComponent extends React.Component {
 		}
 	}
 
-	handleBackspaceEvent(currentKey) {
-		var boxArr_current = this.state.boxArr,
-			selector = "gb"+currentKey,
-			eleValue = document.getElementById(selector).value
-
-		//remove the current glitchybox only if it has no text in it or more than one of them exists
-		if(!eleValue && boxArr_current.length > 1) {
-			boxArr_current.splice(currentKey, 1)
-			
+	handleBackspaceEvent(itemIndex, itemValue) {
+		// remove the current glitchybox only if it has no text in it or more than one of them exists
+		if(!itemValue && this.state.boxArr.length > 1) {
 			this.setState({
-				boxArr: boxArr_current
+				boxArr: this.removeByAttr(this.state.boxArr, "id", itemIndex)
 			})
-
-			this.focusNextItem(currentKey, boxArr_current)
 		}
 	}
 
@@ -59,16 +63,11 @@ export default class AppComponent extends React.Component {
             <div className="glitchyMainContiner row">
             	<div className="col-sm-6 stepsContainer">
                 	<p className="stepsContainerTitle">Steps:</p>
-                	{
-                		this.state.boxArr.map((item, index) => (
-                			<GlitchyBox
-								itemIndex={index}
-                				key={index}
-		                		tabPressed={this.handleTabPressEvent.bind(this)}
-		                		backspacePressed={this.handleBackspaceEvent.bind(this)}
-		                	/>
-                		))
-                	}
+                	<GlitchyBox
+                		elements={this.state.boxArr}
+                		tabPressed={this.handleTabPressEvent.bind(this)}
+	        			backspacePressed={this.handleBackspaceEvent.bind(this)}
+                	/>
                 </div>
             </div>
         )
