@@ -1,4 +1,4 @@
-# glitchy
+# glitchy renamed
 The JIRA tool
 
 ## to start contributing follow the following steps
@@ -7,7 +7,8 @@ The JIRA tool
 - bundle js files: ./node_modules/.bin/webpack -d
 
 Note: to run bundling as watcher
-####run 
+
+###run 
 	./node_modules/.bin/webpack -d --watch
-####or
+###or
 	npm run dev
